@@ -1,9 +1,10 @@
 checklist = []
 
-# checklist.append('Blue')
-# print(checklist)
-# checklist.append('Orange')
-# print(checklist)
+# List of colours to select from
+colours = ['Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Indigo', 'Violet']
+
+#List of clothing to select from
+clothing = ['Headband', 'Cape', 'Shirt', 'Belt', 'Pants', 'Left Boot', 'Right Boot']
 
 #  CREATE
 def create(item):
@@ -13,33 +14,36 @@ def create(item):
 def read(index):
     return checklist[index]
 
-# checklist = ['Blue', 'Orange']
-# checklist[1] = 'Cats'
-# print(checklist)
-
 # UPDATE
 def update(index, item):
     checklist[index] = item
-
-# checklist.pop(1)
-# print(checklist)
 
 # DESTROY
 def destroy(index):
     checklist.pop(index)
 
+# List all items
 def list_all_items():
     index = 0
     for list_item in checklist:
-        print(f'{str(index)} {list_item}')
+        print(f'Index value: {str(index)} || Item: {list_item}')
         index += 1
 
-def mark_completed():
-    index = 0
-    for list_item in checklist:
-        checklist[index] = '√ ' + list_item
-        print(checklist[index])
-        index += 1
+# Checkmark (√) an item
+def mark_completed(input_item):
+    if checklist[input_item][0] != '√':
+        for list_item in checklist:
+            checklist[input_item] = '√ ' + list_item
+    else:
+        print("That item is already checkmarked")
+
+# Uncheck (remove √) an item       
+def uncheck(input_item):
+    if checklist[input_item][0] == '√':
+        for list_item in checklist:
+            checklist[input_item] = checklist[input_item][2:]
+    else:
+        print("That item is not checkmarked yet")
 
 def user_input(prompt):
     # the input function will display a message in the terminal and wait
@@ -48,17 +52,43 @@ def user_input(prompt):
     return user_input
 
 def select(function_code):
-    # create item
-    if function_code.lower() == "c":
+    
+    # ADD item
+    if function_code.lower() == "a":
         input_item = user_input("Input item > ")
         create(input_item)
         return True
 
+    # REMOVE item
+    if function_code.lower() == "r":
+        if len(checklist) > 0:
+            input_item = int(user_input(f"Index number (0 - {len(checklist) - 1}) > "))
+            destroy(input_item)
+        else:
+            print("You haven't added anything to the checklist yet.")
+        return True
+    # CHECKMARK (item
+    if function_code.lower() == "c":
+        if len(checklist) > 0:
+            input_item = int(user_input(f"Index number (0 - {len(checklist) - 1}) > "))
+            mark_completed(input_item)
+        else:
+            print("You haven't added anything to the checklist yet.")
+        return True
+
+    if function_code.lower() == "u":
+        if len(checklist) > 0:
+            input_item = int(user_input(f"Index number (0 - {len(checklist) - 1}) > "))
+            uncheck(input_item)
+        else:
+            print("You haven't added anything to the checklist yet.")
+        return True        
+
     # read item      
-    elif function_code.lower() == "r":
+    elif function_code.lower() == "i":
         item_index = int(user_input("Index Number? > "))
         while item_index >= len(checklist):
-            item_index = int(input(f"Not a valid index number, please enter a number from 0 - {len(checklist) -1} > "))
+            item_index = int(input(f"Not a valid index number, please enter a number from 0 - {len(checklist) - 1} > "))
         print(f"{item_index} {read(item_index)}")
         return True
 
@@ -104,5 +134,14 @@ def test():
 
 running = True
 while running:
-    selection = user_input("Press C to add to list, R to Read from list, P to display list or Q to quit > ")
+    print()
+    selection = user_input("""Enter a command:
+    'A' to add to list
+    'R' to remove from list
+    'C' to checkmark an item as completed
+    'U' to uncheck an already checkmarked item
+    'P' to display the whole list
+    'I' to display a single list item
+    'Q' to quit
+    Enter your command here > """)
     running = select(selection)
