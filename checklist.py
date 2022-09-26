@@ -147,6 +147,7 @@ while running:
     'I' to display a single list item
     'Q' to quit
     Enter your command here > """)
+    sleep(1)
     system('clear')
     running = select(selection)
     sleep(3)
