@@ -1,3 +1,6 @@
+from os import system
+from time import sleep
+
 checklist = []
 
 # List of colours to select from
@@ -134,7 +137,7 @@ def test():
 
 running = True
 while running:
-    print()
+    system('clear')
     selection = user_input("""Enter a command:
     'A' to add to list
     'R' to remove from list
@@ -144,4 +147,6 @@ while running:
     'I' to display a single list item
     'Q' to quit
     Enter your command here > """)
+    system('clear')
     running = select(selection)
+    sleep(3)
