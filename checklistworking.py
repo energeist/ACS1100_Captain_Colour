@@ -1,11 +1,10 @@
 from os import system
 from time import sleep
+import random
 
 checklist = []
-
 # List of colours to select from
 colours = ['Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Indigo', 'Violet']
-
 #List of clothing to select from
 clothing = ['Headband', 'Cape', 'Shirt', 'Belt', 'Pants', 'Left Boot', 'Right Boot']
 
@@ -52,6 +51,14 @@ def uncheck(input_item):
     else:
         print("That item is not checkmarked yet")
 
+def randomizer(colours, clothing):
+    checklist.clear()
+    random.shuffle(colours)
+    random.shuffle(clothing)
+    for item in range(len(colours)):
+        checklist.append(f'{colours[item]} {clothing[item]}') 
+    return checklist
+
 def user_input(prompt):
     # the input function will display a message in the terminal and wait
     # for user input
@@ -67,12 +74,18 @@ def select(function_code):
         return True
 
     # REMOVE item
-    if function_code.lower() == "r":
+    if function_code.lower() == "d":
         if len(checklist) > 0:
             input_item = get_input(checklist)
             destroy(input_item)
         else:
             print("You haven't added anything to the checklist yet.")
+        return True
+    
+    # RANDOMIZE a list
+    if function_code.lower() == "r":
+        randomizer(colours, clothing)
+        print("Random list generated!")
         return True
 
     # CHECKMARK (item
@@ -92,7 +105,8 @@ def select(function_code):
             print("You haven't added anything to the checklist yet.")
         return True        
 
-    # read item      
+    # READ item
+           
     elif function_code.lower() == "i":
         if len(checklist) > 0:
             input_item = get_input(checklist)
@@ -145,8 +159,9 @@ def select(function_code):
 running = True
 while running:
     selection = user_input("""Enter a command:
-    'A' to add to list
-    'R' to remove from list
+    'A' to add to the list
+    'D' to delete from the list
+    'R' to generate a new random list
     'C' to checkmark an item as completed
     'U' to uncheck an already checkmarked item
     'P' to display the whole list
@@ -157,3 +172,5 @@ while running:
     system('clear')
     running = select(selection)
     sleep(1)
+
+
