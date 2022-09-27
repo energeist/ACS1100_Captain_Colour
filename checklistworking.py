@@ -9,6 +9,7 @@ colours = ['Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Indigo', 'Violet']
 clothing = ['Headband', 'Cape', 'Shirt', 'Belt', 'Pants', 'Left Boot', 'Right Boot']
 
 #  CREATE
+
 def create(item):
     checklist.append(item)
 
@@ -161,11 +162,11 @@ while running:
     selection = user_input("""Enter a command:
     'A' to add to the list
     'D' to delete from the list
-    'R' to generate a new random list
+    'R' to generate a new random list and replace any current list items
     'C' to checkmark an item as completed
     'U' to uncheck an already checkmarked item
     'P' to display the whole list
-    'I' to display a single list item
+    '\x1b[1;31;40''I''\x1b[0m to display a single list item
     'Q' to quit
     Enter your command here > """)
     sleep(1)
