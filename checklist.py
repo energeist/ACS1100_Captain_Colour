@@ -27,8 +27,6 @@ def update(index, item):
 
 # DESTROY
 def destroy(index):
-    chosen_colours.pop(index)
-    chosen_clothes.pop(index)
     checklist.pop(index)
 
 #User input
@@ -118,8 +116,10 @@ def select(function_code, checklist):
             list_all_items()
             print() 
         if len(checklist) < 7:
-            input_colour = user_input(f"Input a colour from this list: {colours} > ")
+            input_colour = user_input(f"Input a colour from this list: {colours}, or push 'X' to exit > ")
             while input_colour.title() not in colours:
+                if input_colour.title() == 'X':
+                    break
                 sleep(1)
                 system('clear')
                 print(f"We don't have the dye for {input_colour}!")
@@ -135,31 +135,35 @@ def select(function_code, checklist):
                 print(f"Your outfit currently looks like this:")
                 list_all_items()
                 print()
-                input_colour = user_input(f"Please choose another item from this list: {colours} > ")
-            list_colours.append(input_colour.title())
-            chosen_colours.append(input_colour.title())
-            
-            input_clothing = user_input(f"Input an item of clothing from this list: {clothing} > ")
-            while input_clothing.title() not in clothing:
-                sleep(1)
-                system('clear')
-                print("You don't have any {input_clothing} in your wardrobe!")
-                print(f"Your outfit currently looks like this:")
-                list_all_items()
-                print()
-                input_clothing = user_input(f"Please select an item of clothing from this list: {clothing} > ")
-            while input_clothing.title() in chosen_clothes:
-                sleep(1)
-                system('clear')
-                print(f"You've already chosen {input_clothing}")
-                print(f"Your outfit currently looks like this:")
-                list_all_items()
-                print()
-                input_clothing = user_input(f"Please choose another item from this list: {clothing} > ")
-            list_clothes.append(input_clothing.title())
-            chosen_clothes.append(input_clothing.title())
-            input_item = f'{colourize(input_colour)} {input_clothing}' 
-            create(input_item)
+                input_colour = user_input(f"Please choose another item from this list: {colours}, or push 'X' to exit > ")
+            if input_colour.title() != 'X':
+                                
+                input_clothing = user_input(f"Input an item of clothing from this list: {clothing}, or push 'X' to exit > ")
+                while input_clothing.title() not in clothing:
+                    if input_clothing.title() == 'X':
+                        break
+                    sleep(1)
+                    system('clear')
+                    print(f"You don't have any {input_clothing} in your wardrobe!")
+                    print(f"Your outfit currently looks like this:")
+                    list_all_items()
+                    print()
+                    input_clothing = user_input(f"Please select an item of clothing from this list: {clothing}, or push 'X' to exit > ")
+                while input_clothing.title() in chosen_clothes:
+                    sleep(1)
+                    system('clear')
+                    print(f"You've already chosen {input_clothing}")
+                    print(f"Your outfit currently looks like this:")
+                    list_all_items()
+                    print()
+                    input_clothing = user_input(f"Please choose another item from this list: {clothing} > ")
+                if input_clothing.title() != 'X':
+                    list_colours.append(input_colour.title())
+                    chosen_colours.append(input_colour.title())
+                    list_clothes.append(input_clothing.title())
+                    chosen_clothes.append(input_clothing.title())
+                    input_item = f'{colourize(input_colour.title())} {input_clothing.title()}' 
+                    create(input_item)
         else:
             print("You've already chosen a full outfit! Take a look at it and delete some things if you want to switch it up.")
         return True
@@ -168,6 +172,8 @@ def select(function_code, checklist):
     if function_code.lower() == "d":
         if len(checklist) > 0:
             input_item = get_input(checklist)
+            chosen_colours.pop(input_item)
+            chosen_clothes.pop(input_item)
             destroy(input_item)
         else:
             print("You haven't added anything to the checklist yet.")
@@ -177,6 +183,8 @@ def select(function_code, checklist):
     if function_code.lower() == "r":
         randomizer(colours, clothing)
         print("Random list generated!")
+        print(chosen_colours)
+        print(chosen_clothes)
         return True
 
     # CHECKMARK (item
