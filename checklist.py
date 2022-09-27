@@ -5,6 +5,8 @@ import random
 checklist = []
 list_colours = []
 list_clothes = []
+chosen_colours = []
+chosen_clothes = []
 # List of colours to select from
 colours = ['Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Indigo', 'Violet']
 #List of clothing to select from
@@ -25,8 +27,11 @@ def update(index, item):
 
 # DESTROY
 def destroy(index):
+    chosen_colours.pop(index)
+    chosen_clothes.pop(index)
     checklist.pop(index)
 
+#User input
 def get_input(checklist):
     input_item = int(user_input(f"Index number? (0 - {len(checklist) - 1}) > "))
     while input_item >= len(checklist):
@@ -71,6 +76,7 @@ def uncheck(input_item):
     else:
         print("That item is not checkmarked yet")
 
+# Outfit randomizer
 def randomizer(colours, clothing):
     checklist.clear()
     list_colours.clear()
@@ -78,9 +84,13 @@ def randomizer(colours, clothing):
     random.shuffle(colours)
     random.shuffle(clothing)
     for item in range(len(colours)):
-        checklist.append(f'{colourize(colours[item])} {clothing[item]}') 
+        chosen_colours.append(colours[item].title())
+        chosen_clothes.append(clothing[item].title())
+        checklist.append(f'{colourize(colours[item].title())} {clothing[item].title()}')
+    split_list(checklist) 
     return checklist
 
+# List splitter - generate individual lists of colours and clothing from tuples
 def split_list(checklist):
     split_list = []
     for i in range(len(checklist)):
@@ -100,25 +110,58 @@ def user_input(prompt):
 
 def select(function_code, checklist):
     
-    # ADD item
+    # ADD item and check for entries
     if function_code.lower() == "a":
-        split_list(checklist)
-        input_colour = user_input(f"Input a colour from this list: {colours} > ")
-        while input_colour.title() not in colours:
-            input_colour = user_input(f"We don't have that dye colour! Please select a colour from this list: {colours} > ")
-        while input_colour.title() in list_colours:
-            input_colour = user_input(f"You've already chosen {input_colour}, please choose another item from this list: {colours} > ")
-        list_colours.append(input_colour.title())
-        
-        input_clothing = user_input(f"Input an item of clothing from this list: {clothing} > ")
-        while input_clothing.title() not in clothing:
-            input_clothing = user_input(f"You don't have any {input_clothing} in your wardrobe! Please select an item of clothing from this list: {clothing} > ")
-        while input_clothing.title() in list_clothes:
-            input_clothing = user_input(f"You've already chosen {input_clothing}, please choose another item from this list: {clothing} > ")
-        list_clothes.append(input_clothing.title())
-        
-        input_item = f'{colourize(input_colour)} {input_clothing}' 
-        create(input_item)
+#        split_list(checklist)
+        if len(checklist) > 0:
+            print(f"Your outfit currently looks like this:")
+            list_all_items()
+            print() 
+        if len(checklist) < 7:
+            input_colour = user_input(f"Input a colour from this list: {colours} > ")
+            while input_colour.title() not in colours:
+                sleep(1)
+                system('clear')
+                print(f"We don't have the dye for {input_colour}!")
+                print(f"Your outfit currently looks like this:")
+                list_all_items()
+                print()
+                input_colour = user_input(f"Please select a colour from this list: {colours} > ")
+            # Need to find colour inside the colourized string now    
+            while input_colour.title() in chosen_colours:
+                sleep(1)
+                system('clear')
+                print(f"You've already chosen {input_colour}")
+                print(f"Your outfit currently looks like this:")
+                list_all_items()
+                print()
+                input_colour = user_input(f"Please choose another item from this list: {colours} > ")
+            list_colours.append(input_colour.title())
+            chosen_colours.append(input_colour.title())
+            
+            input_clothing = user_input(f"Input an item of clothing from this list: {clothing} > ")
+            while input_clothing.title() not in clothing:
+                sleep(1)
+                system('clear')
+                print("You don't have any {input_clothing} in your wardrobe!")
+                print(f"Your outfit currently looks like this:")
+                list_all_items()
+                print()
+                input_clothing = user_input(f"Please select an item of clothing from this list: {clothing} > ")
+            while input_clothing.title() in chosen_clothes:
+                sleep(1)
+                system('clear')
+                print(f"You've already chosen {input_clothing}")
+                print(f"Your outfit currently looks like this:")
+                list_all_items()
+                print()
+                input_clothing = user_input(f"Please choose another item from this list: {clothing} > ")
+            list_clothes.append(input_clothing.title())
+            chosen_clothes.append(input_clothing.title())
+            input_item = f'{colourize(input_colour)} {input_clothing}' 
+            create(input_item)
+        else:
+            print("You've already chosen a full outfit! Take a look at it and delete some things if you want to switch it up.")
         return True
 
     # REMOVE item
@@ -182,6 +225,25 @@ def select(function_code, checklist):
         print("Unknown Option")
         return True
     
+running = True
+while running:
+    selection = user_input("""
+Enter a command:
+'A' to add to the list
+'D' to delete from the list
+'R' to generate a new random list
+'C' to checkmark an item as completed
+'U' to uncheck an already checkmarked item
+'P' to display the whole list
+'I' to display a single list item
+'Q' to quit
+
+Enter your command here > """)
+    sleep(1)
+    system('clear')
+    running = select(selection, checklist)
+    sleep(1)
+
 # def test():
 #     create("purple sox")
 #     create("red cloak")
@@ -203,22 +265,4 @@ def select(function_code, checklist):
 #     list_all_items()
 
 # test()
-
-running = True
-while running:
-    selection = user_input("""Enter a command:
-    'A' to add to the list
-    'D' to delete from the list
-    'R' to generate a new random list
-    'C' to checkmark an item as completed
-    'U' to uncheck an already checkmarked item
-    'P' to display the whole list
-    'I' to display a single list item
-    'Q' to quit
-    Enter your command here > """)
-    sleep(1)
-    system('clear')
-    running = select(selection, checklist)
-    sleep(1)
-
 
