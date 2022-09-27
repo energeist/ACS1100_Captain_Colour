@@ -79,6 +79,8 @@ def randomizer(colours, clothing):
     checklist.clear()
     list_colours.clear()
     list_clothes.clear()
+    chosen_colours.clear()
+    chosen_clothes.clear()
     random.shuffle(colours)
     random.shuffle(clothing)
     for item in range(len(colours)):
@@ -183,8 +185,6 @@ def select(function_code, checklist):
     if function_code.lower() == "r":
         randomizer(colours, clothing)
         print("Random list generated!")
-        print(chosen_colours)
-        print(chosen_clothes)
         return True
 
     # CHECKMARK (item
