@@ -3,8 +3,6 @@ from time import sleep
 import random
 
 checklist = []
-#list_colours = []
-#list_clothes = []
 chosen_colours = []
 chosen_clothes = []
 # List of colours to select from
@@ -114,9 +112,8 @@ def clear_and_prompt(user_input):
 
 def select(function_code, checklist):
     
-    # ADD item and check for entries
+    # ADD item and check for unique entries
     if function_code.lower() == "a":
-#        split_list(checklist)
         if len(checklist) > 0:
             print(f"Your outfit currently looks like this:")
             list_all_items()
@@ -128,12 +125,10 @@ def select(function_code, checklist):
                     break
                 clear_and_prompt(input_colour)
                 input_colour = user_input(f"Please select a colour from this list: {colours} > ")
-            # Need to find colour inside the colourized string now    
             while input_colour.title() in chosen_colours:
                 clear_and_prompt(input_colour)
                 input_colour = user_input(f"Please choose another item from this list: {colours}, or push 'X' to exit > ")
-            if input_colour.title() != 'X':
-                                
+            if input_colour.title() != 'X':              
                 input_clothing = user_input(f"Input an item of clothing from this list: {clothing}, or push 'X' to exit > ")
                 while input_clothing.title() not in clothing:
                     if input_clothing.title() == 'X':
