@@ -3,8 +3,8 @@ from time import sleep
 import random
 
 checklist = []
-list_colours = []
-list_clothes = []
+#list_colours = []
+#list_clothes = []
 chosen_colours = []
 chosen_clothes = []
 # List of colours to select from
@@ -77,8 +77,6 @@ def uncheck(input_item):
 # Outfit randomizer
 def randomizer(colours, clothing):
     checklist.clear()
-    list_colours.clear()
-    list_clothes.clear()
     chosen_colours.clear()
     chosen_clothes.clear()
     random.shuffle(colours)
@@ -95,9 +93,7 @@ def split_list(checklist):
     split_list = []
     for i in range(len(checklist)):
         split_list.append(checklist[i].split())
-        list_colours.append(split_list[i][0])
         colourize(split_list[i][0])
-        list_clothes.append(split_list[i][1])
         coloured_item = split_list[i][0] + ' ' + split_list[i][1]
         update(i, coloured_item)
     return checklist
@@ -107,6 +103,14 @@ def user_input(prompt):
     # for user input
     user_input = input(prompt)
     return user_input
+
+def clear_and_prompt(user_input):
+    sleep(1)
+    system('clear')
+    print(f"Either you've already chosen {user_input}, or it's not a valid input for your last choice!")
+    print(f"Your outfit currently looks like this:")
+    list_all_items()
+    print()
 
 def select(function_code, checklist):
     
@@ -122,21 +126,11 @@ def select(function_code, checklist):
             while input_colour.title() not in colours:
                 if input_colour.title() == 'X':
                     break
-                sleep(1)
-                system('clear')
-                print(f"We don't have the dye for {input_colour}!")
-                print(f"Your outfit currently looks like this:")
-                list_all_items()
-                print()
+                clear_and_prompt(input_colour)
                 input_colour = user_input(f"Please select a colour from this list: {colours} > ")
             # Need to find colour inside the colourized string now    
             while input_colour.title() in chosen_colours:
-                sleep(1)
-                system('clear')
-                print(f"You've already chosen {input_colour}")
-                print(f"Your outfit currently looks like this:")
-                list_all_items()
-                print()
+                clear_and_prompt(input_colour)
                 input_colour = user_input(f"Please choose another item from this list: {colours}, or push 'X' to exit > ")
             if input_colour.title() != 'X':
                                 
@@ -144,25 +138,14 @@ def select(function_code, checklist):
                 while input_clothing.title() not in clothing:
                     if input_clothing.title() == 'X':
                         break
-                    sleep(1)
-                    system('clear')
-                    print(f"You don't have any {input_clothing} in your wardrobe!")
-                    print(f"Your outfit currently looks like this:")
-                    list_all_items()
-                    print()
+                    clear_and_prompt(input_clothing)
                     input_clothing = user_input(f"Please select an item of clothing from this list: {clothing}, or push 'X' to exit > ")
                 while input_clothing.title() in chosen_clothes:
                     sleep(1)
-                    system('clear')
-                    print(f"You've already chosen {input_clothing}")
-                    print(f"Your outfit currently looks like this:")
-                    list_all_items()
-                    print()
+                    clear_and_prompt(input_clothing)
                     input_clothing = user_input(f"Please choose another item from this list: {clothing} > ")
                 if input_clothing.title() != 'X':
-                    list_colours.append(input_colour.title())
                     chosen_colours.append(input_colour.title())
-                    list_clothes.append(input_clothing.title())
                     chosen_clothes.append(input_clothing.title())
                     input_item = f'{colourize(input_colour.title())} {input_clothing.title()}' 
                     create(input_item)
